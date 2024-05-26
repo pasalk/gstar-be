@@ -29,12 +29,12 @@ public class Tournament {
     TournamentStructure tournamentStructure;
 
     @Column(name = "start_date")
-    LocalDateTime startDate;
+    String startDate;
 
     @Column(name = "end_date")
-    LocalDateTime endDate;
+    String endDate;
 
-    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     @Column(name = "prize_fond")
@@ -44,9 +44,6 @@ public class Tournament {
     @JoinColumn(name = "tournament_status_id")
     TournamentStatus tournamentStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "organizer_id")
-    Organizer organizer;
 
 
 }

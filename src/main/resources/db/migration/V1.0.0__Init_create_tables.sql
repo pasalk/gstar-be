@@ -123,8 +123,8 @@ CREATE TABLE tournament
     t_id                    BIGSERIAL PRIMARY KEY,
     name                    VARCHAR(255),
     tournament_structure_id INT REFERENCES tournament_structure (ts_id),
-    start_date              TIMESTAMP,
-    end_date                TIMESTAMP,
+    start_date VARCHAR(255),
+    end_date   VARCHAR(255),
     prize_fond              TEXT,
     tournament_status_id INT references tournament_status (ts_id),
     organizer_id            INT REFERENCES organizer (o_id)
@@ -149,8 +149,8 @@ CREATE TABLE round
 (
     r_id          BIGSERIAL PRIMARY KEY,
     name          VARCHAR(255),
-    start_date    TIMESTAMP,
-    end_date      TIMESTAMP,
+    start_date VARCHAR(255),
+    end_date   VARCHAR(255),
     tournament_id INT REFERENCES tournament (t_id)
 );
 
@@ -167,7 +167,7 @@ CREATE TABLE game
     g_id           BIGSERIAL PRIMARY KEY,
     first_team_id  INT REFERENCES team (t_id),
     second_team_id INT REFERENCES team (t_id),
-    date           TIMESTAMP,
+    date VARCHAR(255),
     result_id INT references result (r_id),
     round_id       INT REFERENCES round (r_id)
 );

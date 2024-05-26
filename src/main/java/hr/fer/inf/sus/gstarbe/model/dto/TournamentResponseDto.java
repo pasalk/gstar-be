@@ -15,13 +15,10 @@ import java.util.List;
 public class TournamentResponseDto {
     Long t_id;
     String name;
-    //Long tournament_structure_id;
-    TournamentStructureResponseDto tournamentStructureResponseDto;
-    LocalDateTime start_date;
-    LocalDateTime end_date;
+    Long tournament_structure_id;
+    String start_date;
+    String end_date;
     String prize_fond;
-    //KeyValueDto tournamentStatus;
     Long tournament_status_id;
-    //KeyValueDto organizer;
     List<TeamResponseDto> teams;
 }

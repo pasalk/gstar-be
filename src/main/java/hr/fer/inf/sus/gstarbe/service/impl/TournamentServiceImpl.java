@@ -22,12 +22,10 @@ public class TournamentServiceImpl implements TournamentService {
     final TournamentRepository tournamentRepository;
     final TournamentMapper tournamentMapper;
     final TournamentStructureRepository tournamentStructureRepository;
-    final PointSystemMapper pointSystemMapper;
-    private final PointSystemRepository pointSystemRepository;
-    private final TeamRepository teamRepository;
-    private final TeamMapper teamMapper;
-    private final TournamentTeamMapper tournamentTeamMapper;
-    private final TournamentTeamRepository tournamentTeamRepository;
+    final TeamRepository teamRepository;
+    final TeamMapper teamMapper;
+    final TournamentTeamMapper tournamentTeamMapper;
+    final TournamentTeamRepository tournamentTeamRepository;
 
     @Override
     public List<TournamentResponseDto> getAllTournaments() {

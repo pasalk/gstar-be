@@ -1,6 +1,7 @@
 package hr.fer.inf.sus.gstarbe.mapper;
 
 import hr.fer.inf.sus.gstarbe.model.dbo.Organizer;
+import hr.fer.inf.sus.gstarbe.model.dbo.TournamentStructure;
 import hr.fer.inf.sus.gstarbe.model.dbo.codebook.*;
 import hr.fer.inf.sus.gstarbe.model.dto.KeyValueDto;
 import jakarta.persistence.EntityManager;
@@ -20,6 +21,9 @@ public abstract class CodebookMapper {
     @Mapping(source = "tsId", target = "key")
     public abstract KeyValueDto tournamentStatusToDto(TournamentStatus tournamentStatus);
 
+    TournamentStructure tournamentStructureToEntity(Long id) {
+        return entityManager.getReference(TournamentStructure.class, id);
+    }
     Organizer organizerToEntity(Long id) {
         return entityManager.getReference(Organizer.class, id);
     }

@@ -22,10 +22,10 @@ public class Round {
     String name;
 
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    String startDate;
 
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    String endDate;
 
     @ManyToOne
     @JoinColumn(name = "tournament_id")

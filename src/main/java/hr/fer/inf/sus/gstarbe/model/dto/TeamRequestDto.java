@@ -17,5 +17,4 @@ public class TeamRequestDto {
     String name;
     //avatar
     String description;
-    //List<Long> playerIds;
 }

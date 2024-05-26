@@ -1,9 +1,7 @@
 package hr.fer.inf.sus.gstarbe.service.impl;
 
 import hr.fer.inf.sus.gstarbe.mapper.TeamMapper;
-import hr.fer.inf.sus.gstarbe.mapper.TeamsPlayersMapper;
 import hr.fer.inf.sus.gstarbe.mapper.TournamentTeamMapper;
-import hr.fer.inf.sus.gstarbe.mapper.TournamentTeamMapperImpl;
 import hr.fer.inf.sus.gstarbe.model.dbo.*;
 import hr.fer.inf.sus.gstarbe.model.dto.TeamRequestDto;
 import hr.fer.inf.sus.gstarbe.model.dto.TeamResponseDto;
@@ -20,9 +18,6 @@ import java.util.List;
 public class TeamServiceImpl implements TeamService {
     final TeamRepository teamRepository;
     final TeamMapper teamMapper;
-    final PlayerRepository playerRepository;
-    final TeamsPlayersRepository teamsPlayersRepository;
-    final TeamsPlayersMapper teamsPlayersMapper;
     final TournamentRepository tournamentRepository;
     final TournamentTeamRepository tournamentTeamRepository;
     final TournamentTeamMapper tournamentTeamMapper;

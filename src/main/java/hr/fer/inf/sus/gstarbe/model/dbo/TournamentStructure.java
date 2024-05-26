@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO dummy data
 @Entity
 @Table(name = "tournament_structure")
 @Data

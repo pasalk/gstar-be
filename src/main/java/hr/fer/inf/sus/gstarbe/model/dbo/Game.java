@@ -27,7 +27,7 @@ public class Game {
     Team secondTeam;
 
     @Column(name = "date")
-    LocalDateTime date;
+    String date;
 
     @OneToOne
     @JoinColumn(name = "result_id")

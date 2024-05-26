@@ -12,7 +12,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = PlayerMapper.class)
+@Mapper(componentModel = "spring")
 public abstract class TeamMapper {
 
     @PersistenceContext
@@ -27,6 +27,5 @@ public abstract class TeamMapper {
     @Mapping(source = "TId", target = "t_id")
     public abstract TeamResponseDto toDto(Team team);
 
-    //TODO
     public abstract void toEntity(@MappingTarget Team team, TeamRequestDto teamRequestDto);
 }
