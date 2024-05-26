@@ -2,9 +2,9 @@ package hr.fer.inf.sus.gstarbe.service.impl;
 
 import hr.fer.inf.sus.gstarbe.mapper.TeamMapper;
 import hr.fer.inf.sus.gstarbe.mapper.TeamsPlayersMapper;
-import hr.fer.inf.sus.gstarbe.model.dbo.Player;
-import hr.fer.inf.sus.gstarbe.model.dbo.Team;
-import hr.fer.inf.sus.gstarbe.model.dbo.TeamsPlayers;
+import hr.fer.inf.sus.gstarbe.mapper.TournamentTeamMapper;
+import hr.fer.inf.sus.gstarbe.mapper.TournamentTeamMapperImpl;
+import hr.fer.inf.sus.gstarbe.model.dbo.*;
 import hr.fer.inf.sus.gstarbe.model.dto.TeamRequestDto;
 import hr.fer.inf.sus.gstarbe.model.dto.TeamResponseDto;
 import hr.fer.inf.sus.gstarbe.service.TeamService;
@@ -23,26 +23,25 @@ public class TeamServiceImpl implements TeamService {
     final PlayerRepository playerRepository;
     final TeamsPlayersRepository teamsPlayersRepository;
     final TeamsPlayersMapper teamsPlayersMapper;
+    final TournamentRepository tournamentRepository;
+    final TournamentTeamRepository tournamentTeamRepository;
+    final TournamentTeamMapper tournamentTeamMapper;
+
+    @Override
+    public TeamResponseDto createTeam(Long tournamentId, TeamRequestDto teamRequestDto) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new EntityNotFoundException("Tournament with given id not found."));
+
+        Team team = teamRepository.save(teamMapper.toEntity(teamRequestDto));
+
+        tournamentTeamRepository.save(tournamentTeamMapper.toEntity(tournamentId, team.getTId()));
+
+        return getTeam(team.getTId());
+    }
 
     @Override
     public TeamResponseDto createTeam(TeamRequestDto teamRequestDto) {
-        /*
-        for(Long playerId: teamRequestDto.getPlayerIds()){
-            if (!playerRepository.existsById(playerId)){
-                throw new EntityNotFoundException("Unable to add nonexistent player to team.");
-            }
-        }
-
-         */
-
         Team team = teamRepository.save(teamMapper.toEntity(teamRequestDto));
-        /*
-        for(Long playerId: teamRequestDto.getPlayerIds()){
-            teamsPlayersRepository.save(teamsPlayersMapper.toEntity(team.getTId(), playerId));
-        }
-
-         */
-
         return getTeam(team.getTId());
     }
 
@@ -51,7 +50,6 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team with given id not found."));
 
-        //List<Player> players = team.getTeamPlayers().stream().map(TeamsPlayers::getPlayer).toList();
         return teamMapper.toDto(team);
     }
 
@@ -60,21 +58,21 @@ public class TeamServiceImpl implements TeamService {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new EntityNotFoundException("Team with given id not found."));
 
-        /*
-        for(Long playerId: teamRequestDto.getPlayerIds()){
-            if (!playerRepository.existsById(playerId)){
-                throw new EntityNotFoundException("Unable to add nonexistent player to team.");
-            }
-        }
+        teamMapper.toEntity(team, teamRequestDto);
+        teamRepository.save(team);
 
-         */
-
-
-        return null;
+        return getTeam(teamId);
     }
 
     @Override
     public void deleteTeam(Long teamId) {
+        if (!teamRepository.existsById(teamId)) {
+            throw new EntityNotFoundException("Team with given id not found.");
+        }
 
+        List<TournamentTeam> tournamentTeams = tournamentTeamRepository.findAllByTeamId(teamId);
+        tournamentTeamRepository.deleteAll(tournamentTeams);
+
+        teamRepository.deleteById(teamId);
     }
 }

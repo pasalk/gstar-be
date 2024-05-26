@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.*;
 public class TeamController {
     final TeamService teamService;
 
+    @PostMapping("/tournament/{id}/team")
+    public ResponseEntity<TeamResponseDto> createTeam(@PathVariable Long id, @RequestBody final TeamRequestDto teamRequestDto) {
+        return ResponseEntity.ok(teamService.createTeam(id, teamRequestDto));
+    }
+
     @PostMapping("/team")
     public ResponseEntity<TeamResponseDto> createTeam(@RequestBody final TeamRequestDto teamRequestDto) {
         return ResponseEntity.ok(teamService.createTeam(teamRequestDto));
