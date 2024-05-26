@@ -1,12 +1,9 @@
 package hr.fer.inf.sus.gstarbe.service.impl;
 
-import hr.fer.inf.sus.gstarbe.mapper.PointSystemMapper;
-import hr.fer.inf.sus.gstarbe.mapper.TournamentMapper;
-import hr.fer.inf.sus.gstarbe.model.dbo.PointSystem;
-import hr.fer.inf.sus.gstarbe.model.dbo.Tournament;
-import hr.fer.inf.sus.gstarbe.model.dbo.TournamentStructure;
+import hr.fer.inf.sus.gstarbe.mapper.*;
+import hr.fer.inf.sus.gstarbe.model.dbo.*;
 import hr.fer.inf.sus.gstarbe.model.dto.*;
-import hr.fer.inf.sus.gstarbe.repository.PointSystemRepository;
+import hr.fer.inf.sus.gstarbe.repository.*;
 import hr.fer.inf.sus.gstarbe.repository.TournamentRepository;
 import hr.fer.inf.sus.gstarbe.repository.TournamentStructureRepository;
 import hr.fer.inf.sus.gstarbe.service.TournamentService;
@@ -27,6 +24,10 @@ public class TournamentServiceImpl implements TournamentService {
     final TournamentStructureRepository tournamentStructureRepository;
     final PointSystemMapper pointSystemMapper;
     private final PointSystemRepository pointSystemRepository;
+    private final TeamRepository teamRepository;
+    private final TeamMapper teamMapper;
+    private final TournamentTeamMapper tournamentTeamMapper;
+    private final TournamentTeamRepository tournamentTeamRepository;
 
     @Override
     public List<TournamentResponseDto> getAllTournaments() {
@@ -40,31 +41,31 @@ public class TournamentServiceImpl implements TournamentService {
                 .orElseThrow(() -> new EntityNotFoundException("Tournament with given id not found."));
         TournamentResponseDto tournamentResponseDto = tournamentMapper.toDto(tournament);
 
-        List<PointSystemResponseDto> pointSystemResponseDtoList = tournament.getTournamentStructure().getPointSystems()
-                .stream()
-                .map(pointSystemMapper::toDto).toList();
+        List<Team> teams = tournament.getTournamentTeams().stream().map(TournamentTeam::getTeam).toList();
+        List<TeamResponseDto> teamResponseDtoList = new ArrayList<>();
+        for (Team team : teams) {
+            teamResponseDtoList.add(teamMapper.toDto(team));
+        }
 
-        TournamentStructureResponseDto tournamentStructureResponseDto = tournamentResponseDto.getTournamentStructureResponseDto();
-        tournamentStructureResponseDto.setPointSystemResponseDtoList(pointSystemResponseDtoList);
+        tournamentResponseDto.setTeams(teamResponseDtoList);
 
         return tournamentResponseDto;
     }
 
     @Override
     public TournamentResponseDto createTournament(TournamentRequestDto tournamentRequestDto) {
-        //todo validate point system
         Tournament tournament = tournamentMapper.toEntity(tournamentRequestDto);
-
-        TournamentStructure tournamentStructure = tournamentStructureRepository.save(tournament.getTournamentStructure());
-        tournament.setTournamentStructure(tournamentStructure);
-
         tournament = tournamentRepository.save(tournament);
 
-        pointSystemRepository.saveAll(
-                tournamentRequestDto.getTournamentStructureRequestDto().getPointSystemRequestDtoList()
-                        .stream()
-                        .map(pointSystemRequestDto -> pointSystemMapper.toEntity(pointSystemRequestDto, tournamentStructure.getTsId()))
-                        .toList());
+        List<Team> teams = new ArrayList<>();
+        for (TeamRequestDto teamRequestDto : tournamentRequestDto.getTeams()) {
+            teams.add(teamRepository.save(teamMapper.toEntity(teamRequestDto)));
+        }
+
+        for (Team team : teams) {
+            TournamentTeam tournamentTeam = tournamentTeamMapper.toEntity(tournament.getTId(), team.getTId());
+            tournamentTeamRepository.save(tournamentTeam);
+        }
 
         return getTournament(tournament.getTId());
     }
@@ -75,29 +76,27 @@ public class TournamentServiceImpl implements TournamentService {
                 .orElseThrow(() -> new EntityNotFoundException("Tournament with given id not found."));
 
         tournamentMapper.toEntity(tournament, tournamentRequestDto);
-
-        TournamentStructure tournamentStructure = tournamentStructureRepository.save(tournament.getTournamentStructure());
-        tournament.setTournamentStructure(tournamentStructure);
-
         tournamentRepository.save(tournament);
 
-        List<Long> currentPointSystemIds = tournamentStructure.getPointSystems().stream().map(PointSystem::getPsId).toList();
-        List<Long> savedPointSystems = new ArrayList<>();
+        List<Long> currentTeams = tournament.getTournamentTeams().stream().map(TournamentTeam::getTtId).toList();
+        List<Long> savedTeams = new ArrayList<>();
 
-        for (PointSystemRequestDto pointSystemRequestDto : tournamentRequestDto.getTournamentStructureRequestDto().getPointSystemRequestDtoList()) {
-            Optional<PointSystem> pointSystem = pointSystemRepository.findByTournamentStructureIdAndResultTypeId(tournamentStructure.getTsId(), pointSystemRequestDto.getResultTypeId());
-            if (pointSystem.isPresent()) {
-                pointSystemMapper.toEntity(pointSystem.get(), pointSystemRequestDto);
+        for (TeamRequestDto teamRequestDto : tournamentRequestDto.getTeams()) {
+            Optional<TournamentTeam> tournamentTeam = tournamentTeamRepository.findByTournamentIdAndTeamName(tournamentId, teamRequestDto.getName());
+            if (tournamentTeam.isPresent()) {
+                Team team = tournamentTeam.get().getTeam();
+                teamMapper.toEntity(team, teamRequestDto);
+                teamRepository.save(team);
             } else {
-                pointSystem = Optional.of(pointSystemMapper.toEntity(pointSystemRequestDto, tournamentStructure.getTsId()));
+                Team team = teamRepository.save(teamMapper.toEntity(teamRequestDto));
+                tournamentTeam = Optional.of(tournamentTeamRepository.save(tournamentTeamMapper.toEntity(tournamentId, team.getTId())));
             }
-            PointSystem savedPointSystem = pointSystemRepository.save(pointSystem.get());
-            savedPointSystems.add(savedPointSystem.getPsId());
+            savedTeams.add(tournamentTeam.get().getTtId());
         }
 
-        currentPointSystemIds = currentPointSystemIds.stream().filter(psId -> !savedPointSystems.contains(psId)).toList();
-        if (!currentPointSystemIds.isEmpty()) {
-            pointSystemRepository.deleteAllById(currentPointSystemIds);
+        currentTeams = currentTeams.stream().filter(ttId -> !savedTeams.contains(ttId)).toList();
+        if (!currentTeams.isEmpty()) {
+            tournamentTeamRepository.deleteAllById(currentTeams);
         }
 
         return getTournament(tournamentId);
@@ -108,6 +107,9 @@ public class TournamentServiceImpl implements TournamentService {
         if (!tournamentRepository.existsById(tournamentId)) {
             throw new EntityNotFoundException("Tournament with given id not found.");
         }
+
+        List<TournamentTeam> tournamentTeams = tournamentTeamRepository.findAllByTournamentId(tournamentId);
+        tournamentTeamRepository.deleteAll(tournamentTeams);
 
         tournamentRepository.deleteById(tournamentId);
     }

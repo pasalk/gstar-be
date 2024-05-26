@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "player")
 @Data
@@ -38,4 +41,7 @@ public class Player {
     @OneToOne
     @JoinColumn(name = "statistics_id")
     Statistics statistics;
+
+    @OneToMany(mappedBy = "player", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<TeamsPlayers> playerTeams = new ArrayList<>();
 }

@@ -57,7 +57,8 @@ CREATE TABLE team
 (
     t_id          BIGSERIAL PRIMARY KEY,
     name          VARCHAR(255),
-    statistics_id INT REFERENCES statistics (s_id)
+    statistics_id INT REFERENCES statistics (s_id),
+    description   TEXT
 );
 
 CREATE TABLE teams_players

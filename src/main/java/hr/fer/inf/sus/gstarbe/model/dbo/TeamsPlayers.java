@@ -23,4 +23,5 @@ public class TeamsPlayers {
     @ManyToOne
     @JoinColumn(name = "player_id")
     Player player;
+
 }
