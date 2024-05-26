@@ -11,6 +11,9 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,6 +55,9 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public TournamentResponseDto createTournament(TournamentRequestDto tournamentRequestDto) {
+
+        validateRequestDto(tournamentRequestDto);
+
         Tournament tournament = tournamentMapper.toEntity(tournamentRequestDto);
         tournament = tournamentRepository.save(tournament);
 
@@ -72,6 +78,8 @@ public class TournamentServiceImpl implements TournamentService {
     public TournamentResponseDto updateTournament(Long tournamentId, TournamentRequestDto tournamentRequestDto) {
         Tournament tournament = tournamentRepository.findById(tournamentId)
                 .orElseThrow(() -> new EntityNotFoundException("Tournament with given id not found."));
+
+        validateRequestDto(tournamentRequestDto);
 
         tournamentMapper.toEntity(tournament, tournamentRequestDto);
         tournamentRepository.save(tournament);
@@ -111,4 +119,20 @@ public class TournamentServiceImpl implements TournamentService {
 
         tournamentRepository.deleteById(tournamentId);
     }
+
+    private void validateRequestDto(TournamentRequestDto tournamentRequestDto) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(tournamentRequestDto.getStart_date(), formatter);
+        LocalDate endDate = LocalDate.parse(tournamentRequestDto.getEnd_date(), formatter);
+
+        if (endDate.isBefore(startDate)) {
+            throw new IllegalArgumentException("Given start and end date are invalid.");
+        }
+
+        if (tournamentRequestDto.getPrize_fond().startsWith("-")) {
+            throw new IllegalArgumentException("Prize fund cannot be negative.");
+        }
+
+    }
+
 }
