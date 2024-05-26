@@ -27,13 +27,11 @@ public class Game {
     Team secondTeam;
 
     @Column(name = "date")
-    private LocalDateTime date;
+    LocalDateTime date;
 
-    /*todo
-    @Type(type = "jsonb")
-    @Column(name = "result", columnDefinition = "jsonb")
-    private JSONObject result;
-    */
+    @OneToOne
+    @JoinColumn(name = "result_id")
+    Result result;
 
     @ManyToOne
     @JoinColumn(name = "round_id")

@@ -1,23 +1,44 @@
-CREATE TYPE user_type AS ENUM ('ADMIN', 'PLAYER', 'ORGANIZER', 'FOLLOWER', 'ANALYZER');
-CREATE TYPE tournament_format AS ENUM ('GROUP', 'DROP OUT', 'EACH');
-CREATE TYPE result_type AS ENUM ('WIN', 'DRAW', 'LOSE');
-CREATE TYPE statistics_type AS ENUM ('PLAYER', 'TEAM');
-CREATE TYPE tournament_status AS ENUM ('REGISTRATION', 'ACTIVE', 'FINISHED');
+CREATE TABLE user_type
+(
+    ut_id BIGSERIAL PRIMARY KEY,
+    value VARCHAR(255)
+);
+
+CREATE TABLE tournament_format
+(
+    tf_id BIGSERIAL PRIMARY KEY,
+    value VARCHAR(255)
+);
+CREATE TABLE result_type
+(
+    rt_id BIGSERIAL PRIMARY KEY,
+    value VARCHAR(255)
+);
+CREATE TABLE statistics_type
+(
+    st_id BIGSERIAL PRIMARY KEY,
+    value VARCHAR(255)
+);
+CREATE TABLE tournament_status
+(
+    ts_id BIGSERIAL PRIMARY KEY,
+    value VARCHAR(255)
+);
 
 CREATE TABLE statistics
 (
-    s_id            BIGSERIAL PRIMARY KEY,
-    statistics_type statistics_type
+    s_id               BIGSERIAL PRIMARY KEY,
+    statistics_type_id INT references statistics_type (st_id)
 );
 
 CREATE TABLE "user"
 (
-    u_id         BIGSERIAL PRIMARY KEY,
-    username     VARCHAR(255) UNIQUE,
-    email        VARCHAR(255),
-    password     VARCHAR(255),
-    user_type    user_type,
-    user_subtype user_type
+    u_id            BIGSERIAL PRIMARY KEY,
+    username        VARCHAR(255) UNIQUE,
+    email           VARCHAR(255),
+    password        VARCHAR(255),
+    user_type_id    INT references user_type (ut_id),
+    user_subtype_id INT references user_type (ut_id)
 );
 
 CREATE TABLE player
@@ -81,11 +102,19 @@ CREATE TABLE tournament_structure
     ts_id                  BIGSERIAL PRIMARY KEY,
     game_genre             VARCHAR(255),
     game_name              VARCHAR(255),
-    rules                  JSONB,
-    tournament_format      tournament_format,
+    rules                  TEXT,
+    tournament_format_id   INT references tournament_format (tf_id),
     max_team_number        INT,
-    participation_criteria TEXT,
-    point_system           JSONB
+    participation_criteria TEXT
+);
+
+CREATE TABLE point_system
+(
+    ps_id                   BIGSERIAL PRIMARY KEY,
+    tournament_structure_id INT REFERENCES tournament_structure (ts_id),
+    result_type_id          INT REFERENCES result_type (rt_id),
+    value                   INT
+
 );
 
 CREATE TABLE tournament
@@ -95,10 +124,17 @@ CREATE TABLE tournament
     tournament_structure_id INT REFERENCES tournament_structure (ts_id),
     start_date              TIMESTAMP,
     end_date                TIMESTAMP,
-    rang_list               JSONB,
     prize_fond              TEXT,
-    tournament_status       tournament_status,
+    tournament_status_id INT references tournament_status (ts_id),
     organizer_id            INT REFERENCES organizer (o_id)
+);
+
+CREATE TABLE tournament_team
+(
+    tt_id         BIGSERIAL PRIMARY KEY,
+    tournament_id INT REFERENCES tournament (t_id),
+    team_id       INT REFERENCES team (t_id),
+    points        INT
 );
 
 CREATE TABLE followers_tournaments
@@ -117,14 +153,23 @@ CREATE TABLE round
     tournament_id INT REFERENCES tournament (t_id)
 );
 
+CREATE TABLE result
+(
+    r_id         BIGSERIAL PRIMARY KEY,
+    winner_id    INT REFERENCES team (t_id),
+    first_score  INT,
+    second_score INT
+);
+
 CREATE TABLE game
 (
     g_id           BIGSERIAL PRIMARY KEY,
     first_team_id  INT REFERENCES team (t_id),
     second_team_id INT REFERENCES team (t_id),
     date           TIMESTAMP,
-    result         JSONB,
+    result_id INT references result (r_id),
     round_id       INT REFERENCES round (r_id)
 );
+
 
 

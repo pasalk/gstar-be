@@ -1,6 +1,6 @@
 package hr.fer.inf.sus.gstarbe.model.dbo;
 
-import hr.fer.inf.sus.gstarbe.model.enums.UserType;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,9 +23,11 @@ public class User {
     @Column(name = "email")
     String email;
 
-    @Column(name = "user_type")
+    @ManyToOne
+    @JoinColumn(name = "user_type_id")
     UserType userType;
 
-    @Column(name = "user_subtype")
+    @ManyToOne
+    @JoinColumn(name = "user_subtype_id")
     UserType userSubtype;
 }

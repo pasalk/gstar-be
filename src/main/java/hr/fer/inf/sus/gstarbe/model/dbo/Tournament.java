@@ -1,12 +1,14 @@
 package hr.fer.inf.sus.gstarbe.model.dbo;
 
-import hr.fer.inf.sus.gstarbe.model.enums.TournamentStatus;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tournament")
@@ -32,12 +34,14 @@ public class Tournament {
     @Column(name = "end_date")
     LocalDateTime endDate;
 
-    //todo rang_list
+    @OneToMany(mappedBy = "tournament", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<TournamentTeam> tournamentTeams = new ArrayList<>();
 
     @Column(name = "prize_fond")
     String prizeFond;
 
-    @Column(name = "tournament_status")
+    @ManyToOne
+    @JoinColumn(name = "tournament_status_id")
     TournamentStatus tournamentStatus;
 
     @ManyToOne

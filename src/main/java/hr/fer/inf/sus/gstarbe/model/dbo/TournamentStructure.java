@@ -1,6 +1,6 @@
 package hr.fer.inf.sus.gstarbe.model.dbo;
 
-import hr.fer.inf.sus.gstarbe.model.enums.TournamentFormat;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,9 +23,11 @@ public class TournamentStructure {
     @Column(name = "game_name")
     String gameName;
 
-    //todo rules
+    @Column(name = "rules")
+    String rules;
 
-    @Column(name = "tournament_format")
+    @ManyToOne
+    @JoinColumn(name = "tournament_format_id")
     TournamentFormat tournamentFormat;
 
     @Column(name = "max_team_number")

@@ -1,6 +1,6 @@
 package hr.fer.inf.sus.gstarbe.model.dbo;
 
-import hr.fer.inf.sus.gstarbe.model.enums.StatisticsType;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.StatisticsType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,7 @@ public class Statistics {
     @Column(name = "s_id", updatable = false, nullable = false)
     Long sId;
 
-    @Column(name = "statistics_type")
+    @ManyToOne
+    @JoinColumn(name = "statistics_type_id")
     StatisticsType statisticsType;
 }

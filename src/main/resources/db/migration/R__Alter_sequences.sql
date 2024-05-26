@@ -12,3 +12,12 @@ SELECT setval('teams_players_tp_id_seq', (SELECT MAX(tp_id) FROM teams_players))
 SELECT setval('tournament_t_id_seq', (SELECT MAX(t_id) FROM tournament));
 SELECT setval('tournament_structure_ts_id_seq', (SELECT MAX(ts_id) FROM tournament_structure));
 SELECT setval('user_u_id_seq', (SELECT MAX(u_id) FROM "user"));
+SELECT setval('tournament_team_tt_id_seq', (SELECT MAX(tt_id) FROM tournament_team));
+SELECT setval('user_type_ut_id_seq', (SELECT MAX(ut_id) FROM user_type));
+SELECT setval('tournament_format_tf_id_seq', (SELECT MAX(tf_id) FROM tournament_format));
+SELECT setval('result_type_rt_id_seq', (SELECT MAX(rt_id) FROM result_type));
+SELECT setval('statistics_type_st_id_seq', (SELECT MAX(st_id) FROM statistics_type));
+SELECT setval('tournament_status_ts_id_seq', (SELECT MAX(ts_id) FROM tournament_status));
+SELECT setval('point_system_ps_id_seq', (SELECT MAX(ps_id) FROM point_system));
+SELECT setval('result_r_id_seq', (SELECT MAX(r_id) FROM result));
+
