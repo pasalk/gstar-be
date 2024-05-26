@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,5 +17,5 @@ public class TournamentStructureResponseDto {
     KeyValueDto tournamentFormat;
     Integer maxTeamNumber;
     String participationCriteria;
-    //List<PointSystemResponseDto> pointSystemResponseDtoList;
+    List<PointSystemResponseDto> pointSystemResponseDtoList;
 }

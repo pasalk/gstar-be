@@ -15,7 +15,7 @@ public class ResultType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rt_id", updatable = false, nullable = false)
-    Long rId;
+    Long rtId;
 
     @Column(name = "value")
     String value;
