@@ -14,4 +14,6 @@ public interface CodebookService {
     List<KeyValueDto> getAllTournamentStatuses();
 
     List<KeyValueDto> getAllUserTypes();
+
+    List<KeyValueDto> getAllTournamentStructures();
 }

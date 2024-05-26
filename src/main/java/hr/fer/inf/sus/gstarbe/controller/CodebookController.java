@@ -38,4 +38,9 @@ public class CodebookController {
     public ResponseEntity<List<KeyValueDto>> getAllUserTypes() {
         return ResponseEntity.ok(codebookService.getAllUserTypes());
     }
+
+    @GetMapping("/tournament-structures")
+    public ResponseEntity<List<KeyValueDto>> getAllTournamentStructures() {
+        return ResponseEntity.ok(codebookService.getAllTournamentStructures());
+    }
 }

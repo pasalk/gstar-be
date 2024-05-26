@@ -19,6 +19,7 @@ public class CodebookServiceImpl implements CodebookService {
     final TournamentStatusRepository tournamentStatusRepository;
     final UserTypeRepository userTypeRepository;
     final CodebookMapper codebookMapper;
+    final TournamentStructureRepository tournamentStructureRepository;
 
     @Override
     public List<KeyValueDto> getAllResultTypes() {
@@ -43,5 +44,10 @@ public class CodebookServiceImpl implements CodebookService {
     @Override
     public List<KeyValueDto> getAllUserTypes() {
         return userTypeRepository.findAll().stream().map(codebookMapper::userTypeToDto).toList();
+    }
+
+    @Override
+    public List<KeyValueDto> getAllTournamentStructures() {
+        return tournamentStructureRepository.findAll().stream().map(codebookMapper::tournamentStructureToDto).toList();
     }
 }

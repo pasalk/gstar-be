@@ -52,4 +52,8 @@ public abstract class CodebookMapper {
 
     @Mapping(source = "utId", target = "key")
     public abstract KeyValueDto userTypeToDto(UserType userType);
+
+    @Mapping(source = "tsId", target = "key")
+    @Mapping(source = "gameName", target = "value")
+    public abstract KeyValueDto tournamentStructureToDto(TournamentStructure tournamentStructure);
 }
