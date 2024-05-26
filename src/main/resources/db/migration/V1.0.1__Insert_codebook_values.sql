@@ -26,4 +26,7 @@ VALUES ('REGISTRATION'),
 
 INSERT INTO tournament_structure(game_genre, game_name, rules, tournament_format_id, max_team_number,
                                  participation_criteria)
-VALUES (null, null, null, null, null, null)
+VALUES ('CARD GAME', 'BELOT', null, 2, 25, null),
+       ('BOARD GAME', 'AZUL', null, 1, 16, null),
+       ('VIDEO GAME', 'LEAGUE OF LEGENDS', null, 3, 20, null);
+
