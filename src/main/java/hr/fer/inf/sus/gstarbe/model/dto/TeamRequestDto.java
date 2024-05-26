@@ -15,6 +15,5 @@ import java.util.List;
 @NoArgsConstructor
 public class TeamRequestDto {
     String name;
-    //avatar
     String description;
 }
