@@ -1,6 +1,7 @@
 package hr.fer.inf.sus.gstarbe.mapper;
 
 import hr.fer.inf.sus.gstarbe.model.dbo.Organizer;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.ResultType;
 import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentFormat;
 import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentStatus;
 import hr.fer.inf.sus.gstarbe.model.dto.KeyValueDto;
@@ -36,4 +37,11 @@ public abstract class CodebookMapper {
 
     @Mapping(source = "tfId", target = "key")
     abstract KeyValueDto tournamentFormatToDto(TournamentFormat tournamentFormat);
+
+    ResultType resultTypeToEntity(Long id) {
+        return entityManager.getReference(ResultType.class, id);
+    }
+
+    @Mapping(source = "rtId", target = "key")
+    abstract KeyValueDto resultTypeToDto(ResultType resultType);
 }
