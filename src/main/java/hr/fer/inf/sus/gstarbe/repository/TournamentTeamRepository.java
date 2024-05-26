@@ -26,5 +26,5 @@ public interface TournamentTeamRepository extends JpaRepository<TournamentTeam, 
              SELECT tt FROM TournamentTeam tt
              WHERE tt.team.tId = :id
             """)
-    List<TournamentTeam> findAllByTeamId(Long teamId);
+    List<TournamentTeam> findAllByTeamId(@Param("id") Long teamId);
 }
