@@ -1,9 +1,7 @@
 package hr.fer.inf.sus.gstarbe.mapper;
 
 import hr.fer.inf.sus.gstarbe.model.dbo.Organizer;
-import hr.fer.inf.sus.gstarbe.model.dbo.codebook.ResultType;
-import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentFormat;
-import hr.fer.inf.sus.gstarbe.model.dbo.codebook.TournamentStatus;
+import hr.fer.inf.sus.gstarbe.model.dbo.codebook.*;
 import hr.fer.inf.sus.gstarbe.model.dto.KeyValueDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -20,7 +18,7 @@ public abstract class CodebookMapper {
     }
 
     @Mapping(source = "tsId", target = "key")
-    abstract KeyValueDto tournamentStatusToDto(TournamentStatus tournamentStatus);
+    public abstract KeyValueDto tournamentStatusToDto(TournamentStatus tournamentStatus);
 
     Organizer organizerToEntity(Long id) {
         return entityManager.getReference(Organizer.class, id);
@@ -28,7 +26,7 @@ public abstract class CodebookMapper {
 
     @Mapping(source = "organizerId", target = "key")
     @Mapping(source = "name", target = "value")
-    abstract KeyValueDto organizerToDto(Organizer organizer);
+    public abstract KeyValueDto organizerToDto(Organizer organizer);
 
 
     TournamentFormat tournamentFormatToEntity(Long id) {
@@ -36,12 +34,18 @@ public abstract class CodebookMapper {
     }
 
     @Mapping(source = "tfId", target = "key")
-    abstract KeyValueDto tournamentFormatToDto(TournamentFormat tournamentFormat);
+    public abstract KeyValueDto tournamentFormatToDto(TournamentFormat tournamentFormat);
 
     ResultType resultTypeToEntity(Long id) {
         return entityManager.getReference(ResultType.class, id);
     }
 
     @Mapping(source = "rtId", target = "key")
-    abstract KeyValueDto resultTypeToDto(ResultType resultType);
+    public abstract KeyValueDto resultTypeToDto(ResultType resultType);
+
+    @Mapping(source = "stId", target = "key")
+    public abstract KeyValueDto statisticsTypeToDto(StatisticsType statisticsType);
+
+    @Mapping(source = "utId", target = "key")
+    public abstract KeyValueDto userTypeToDto(UserType userType);
 }

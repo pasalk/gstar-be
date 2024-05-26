@@ -14,7 +14,7 @@ public class StatisticsType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "st_id", updatable = false, nullable = false)
-    Long rId;
+    Long stId;
 
     @Column(name = "value")
     String value;
