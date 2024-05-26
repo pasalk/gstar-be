@@ -19,10 +19,6 @@ public class Team {
     @Column(name = "t_id", updatable = false, nullable = false)
     Long tId;
 
-    @OneToOne
-    @JoinColumn(name = "statistics_id")
-    Statistics statistics;
-
     @Column(name = "name")
     String name;
 
