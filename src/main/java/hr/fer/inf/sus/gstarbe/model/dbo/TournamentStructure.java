@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "tournament_structure")
 @Data
@@ -36,5 +39,7 @@ public class TournamentStructure {
     @Column(name = "participation_criteria")
     String participationCriteria;
 
-    //todo point system
+    @OneToMany(mappedBy = "tournamentStructure", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<PointSystem> pointSystems = new ArrayList<>();
+
 }

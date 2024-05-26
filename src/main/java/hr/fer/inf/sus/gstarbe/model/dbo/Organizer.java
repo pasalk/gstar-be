@@ -14,7 +14,7 @@ public class Organizer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "o_id", updatable = false, nullable = false)
-    Long oId;
+    Long organizerId;
 
     @OneToOne
     @JoinColumn(name = "user_id")

@@ -14,7 +14,7 @@ public class TournamentStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ts_id", updatable = false, nullable = false)
-    Long rId;
+    Long tsId;
 
     @Column(name = "value")
     String value;

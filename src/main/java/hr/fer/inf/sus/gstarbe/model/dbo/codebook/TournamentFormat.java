@@ -14,7 +14,7 @@ public class TournamentFormat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tf_id", updatable = false, nullable = false)
-    Long rId;
+    Long tfId;
 
     @Column(name = "value")
     String value;
